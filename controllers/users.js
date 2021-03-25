@@ -1,44 +1,48 @@
 const User = require('../models/user');
+const { badRequestError, notFoundError } = require('../errors/errors');
 
-const getUsers = (req, res, next) => {
+const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      if (!users) {
-        throw new Error();
-      }
       res.send(users);
     })
-    .catch(next);
+    .catch(() => {
+      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+    });
 };
 
-const getUserById = (req, res, next) => {
+const getUserById = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new Error();
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
       }
-
       res.send(user);
     })
-    .catch(next);
+    .catch(() => {
+      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+    });
 };
 
-const createUser = (req, res, next) => {
+const createUser = (req, res) => {
   const data = { ...req.body };
 
   User.create(data)
     .then((user) => {
-      if (!user) {
-        throw new Error();
-      }
       res.send(user);
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      }
+    });
 };
 
-const updateUserProfile = (req, res, next) => {
+const updateUserProfile = (req, res) => {
   const userId = req.user._id;
   const { name, about } = { ...req.body };
 
@@ -49,15 +53,21 @@ const updateUserProfile = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new Error();
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
       }
 
       res.send(user);
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при обновлении профиля'));
+      } else {
+        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      }
+    });
 };
 
-const updateUserAvatar = (req, res, next) => {
+const updateUserAvatar = (req, res) => {
   const userId = req.user._id;
   const { avatar } = { ...req.body };
 
@@ -66,12 +76,18 @@ const updateUserAvatar = (req, res, next) => {
   User.findByIdAndUpdate(userId, { avatar })
     .then((avatar) => {
       if (!avatar) {
-        throw new Error();
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
       }
 
       res.send(avatar);
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при обновлении аватара'));
+      } else {
+        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      }
+    });
 };
 
 module.exports = {
