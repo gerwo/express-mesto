@@ -1,53 +1,83 @@
 const User = require('../models/user');
 
-const getUser = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.send(users)
+      if (!users) {
+        throw new Error();
+      }
+      res.send(users);
     })
-}
+    .catch(next);
+};
 
-const getUserById = (req, res) => {
-  const {id} = req.params;
+const getUserById = (req, res, next) => {
+  const { userId } = req.params;
 
-  User.findById(id)
+  User.findById(userId)
     .then((user) => {
-      res.send(user)
+      if (!user) {
+        throw new Error();
+      }
+
+      res.send(user);
     })
-}
+    .catch(next);
+};
 
-const createUser = (req, res) => {
-
-  const data = {...req.body};
+const createUser = (req, res, next) => {
+  const data = { ...req.body };
 
   User.create(data)
     .then((user) => {
-      res.send(user)
+      if (!user) {
+        throw new Error();
+      }
+      res.send(user);
     })
-}
+    .catch(next);
+};
 
-const updateUserProfile = (req, res) => {
-  const data = {...req.body};
+const updateUserProfile = (req, res, next) => {
+  const userId = req.user._id;
+  const { name, about } = { ...req.body };
 
-  User.updateOne(data)
+  User.findByIdAndUpdate(
+    userId,
+    { name, about },
+    { new: true },
+  )
     .then((user) => {
-      res.send(user)
-    })
-}
+      if (!user) {
+        throw new Error();
+      }
 
-const updateUserAvatar = (req, res) => {
-  const data = {...req.body};
-
-  User.updateOne(data)
-    .then((user) => {
-      res.send(user)
+      res.send(user);
     })
-}
+    .catch(next);
+};
+
+const updateUserAvatar = (req, res, next) => {
+  const userId = req.user._id;
+  const { avatar } = { ...req.body };
+
+  res.send(avatar);
+
+  User.findByIdAndUpdate(userId, { avatar })
+    .then((avatar) => {
+      if (!avatar) {
+        throw new Error();
+      }
+
+      res.send(avatar);
+    })
+    .catch(next);
+};
 
 module.exports = {
-  getUser,
+  getUsers,
   getUserById,
   createUser,
   updateUserProfile,
-  updateUserAvatar
-}
+  updateUserAvatar,
+};
