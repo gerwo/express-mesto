@@ -1,7 +1,10 @@
-
+const Card = require('../models/card');
 
 const getCards = (req, res) => {
-
+  Card.find({})
+    .then((cards) => {
+      res.send(cards)
+    })
 }
 
 const createCard = (req, res) => {
