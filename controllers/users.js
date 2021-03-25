@@ -7,7 +7,7 @@ const getUsers = (req, res) => {
       res.send(users);
     })
     .catch(() => {
-      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      res.status(500).send(badRequestError('На сервере произошла ошибка'));
     });
 };
 
@@ -22,7 +22,7 @@ const getUserById = (req, res) => {
       res.send(user);
     })
     .catch(() => {
-      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      res.status(500).send(badRequestError('На сервере произошла ошибка'));
     });
 };
 
@@ -37,7 +37,7 @@ const createUser = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при создании пользователя'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };
@@ -62,7 +62,7 @@ const updateUserProfile = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при обновлении профиля'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };
@@ -85,7 +85,7 @@ const updateUserAvatar = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при обновлении аватара'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };

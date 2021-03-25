@@ -7,7 +7,7 @@ const getCards = (req, res) => {
       res.send(cards);
     })
     .catch(() => {
-      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      res.status(500).send(badRequestError('На сервере произошла ошибка'));
     });
 };
 
@@ -23,7 +23,7 @@ const createCard = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при создании карточки'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };
@@ -39,7 +39,7 @@ const deleteCard = (req, res) => {
       res.send(removedCard);
     })
     .catch(() => {
-      res.status(500).send(badRequestError('Ошибка по умолчанию'));
+      res.status(500).send(badRequestError('На сервере произошла ошибка'));
     });
 };
 
@@ -55,7 +55,7 @@ const likeCard = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные для постановки лайка.'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };
@@ -72,7 +72,7 @@ const dislikeCard = (req, res) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные для снятия лайка.'));
       } else {
-        res.status(500).send(badRequestError('Ошибка по умолчанию'));
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
     });
 };
