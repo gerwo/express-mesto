@@ -6,8 +6,12 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.send(users);
     })
-    .catch(() => {
-      res.status(500).send(badRequestError('На сервере произошла ошибка'));
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
+      }
     });
 };
 
@@ -15,14 +19,18 @@ const getUserById = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
+    .orFail(new Error('NotFound'))
     .then((user) => {
-      if (!user) {
-        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
-      }
       res.send(user);
     })
-    .catch(() => {
-      res.status(500).send(badRequestError('На сервере произошла ошибка'));
+    .catch((error) => {
+      if (error.name === 'ValidationError' || error.name === 'CastError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при обновлении профиля'));
+      } else if (error.message === 'NotFound') {
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден'));
+      } else {
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
+      }
     });
 };
 
@@ -49,18 +57,20 @@ const updateUserProfile = (req, res) => {
   User.findByIdAndUpdate(
     userId,
     { name, about },
-    { new: true },
+    {
+      new: true,
+      runValidators: true,
+    },
   )
+    .orFail(new Error('NotFound'))
     .then((user) => {
-      if (!user) {
-        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
-      }
-
       res.send(user);
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
+      if (error.name === 'ValidationError' || error.name === 'CastError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при обновлении профиля'));
+      } else if (error.message === 'NotFound') {
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден'));
       } else {
         res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
@@ -71,19 +81,23 @@ const updateUserAvatar = (req, res) => {
   const userId = req.user._id;
   const { avatar } = { ...req.body };
 
-  res.send(avatar);
-
-  User.findByIdAndUpdate(userId, { avatar })
+  User.findByIdAndUpdate(
+    userId,
+    { avatar },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
+    .orFail(new Error('NotFound'))
     .then((avatar) => {
-      if (!avatar) {
-        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
-      }
-
       res.send(avatar);
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
         res.status(400).send(badRequestError('Переданы некорректные данные при обновлении аватара'));
+      } else if (error.message === 'NotFound') {
+        res.status(404).send(notFoundError('Пользователь по указанному _id не найден.'));
       } else {
         res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }

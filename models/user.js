@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'https://proprikol.ru/wp-content/uploads/2020/02/kartinki-na-avatarku-dlya-parnej-i-muzhchin-8.jpeg',
+    validate: {
+      validator: (value) => /^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/.test(value),
+    },
   },
 });
 
