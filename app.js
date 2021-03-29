@@ -2,7 +2,6 @@ const express = require('express');
 
 const { PORT = 4000 } = process.env;
 const mongoose = require('mongoose');
-const path = require('path');
 const router = require('./routes');
 const { notFoundError } = require('./errors/errors');
 
