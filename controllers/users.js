@@ -1,6 +1,22 @@
 const User = require('../models/user');
 const { badRequestError, notFoundError } = require('../errors/errors');
 
+const createUser = (req, res) => {
+  const data = { ...req.body };
+
+  User.create(data)
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(400).send(badRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
+      }
+    });
+};
+
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
@@ -28,22 +44,6 @@ const getUserById = (req, res) => {
         res.status(400).send(badRequestError('Переданы некорректные данные при обновлении профиля'));
       } else if (error.message === 'NotFound') {
         res.status(404).send(notFoundError('Пользователь по указанному _id не найден'));
-      } else {
-        res.status(500).send(badRequestError('На сервере произошла ошибка'));
-      }
-    });
-};
-
-const createUser = (req, res) => {
-  const data = { ...req.body };
-
-  User.create(data)
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((error) => {
-      if (error.name === 'ValidationError') {
-        res.status(400).send(badRequestError('Переданы некорректные данные при создании пользователя'));
       } else {
         res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }

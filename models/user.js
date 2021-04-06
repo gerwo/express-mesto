@@ -1,14 +1,31 @@
 const mongoose = require('mongoose');
+const validator =  require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
+    type: String,
+    required: false,
+    minlength: 2,
+    maxlength: 30,
+    default: "Жак-Ив Кусто",
+  },
+
+  about: {
+    type: String,
+    required: false,
+    minlength: 2,
+    maxlength: 30,
+    default: "Исследователь",
+  },
+
+  email : {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 30,
   },
 
-  about: {
+  password : {
     type: String,
     required: true,
     minlength: 2,
@@ -17,8 +34,8 @@ const userSchema = new mongoose.Schema({
 
   avatar: {
     type: String,
-    required: true,
-    default: 'https://proprikol.ru/wp-content/uploads/2020/02/kartinki-na-avatarku-dlya-parnej-i-muzhchin-8.jpeg',
+    required: false,
+    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
       validator: (value) => /^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/.test(value),
     },
