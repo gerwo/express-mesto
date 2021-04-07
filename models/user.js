@@ -21,15 +21,15 @@ const userSchema = new mongoose.Schema({
   email : {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30,
+    minlength: 8,
+    unique: true,
   },
 
   password : {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30,
+    minlength: 8,
+    select: false
   },
 
   avatar: {

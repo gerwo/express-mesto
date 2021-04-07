@@ -1,12 +1,40 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { badRequestError, notFoundError } = require('../errors/errors');
 
-const createUser = (req, res) => {
-  const data = { ...req.body };
+const login = (req, res) => {
+  const {email, password} = req.body;
 
-  User.create(data)
+  if(!email || !password){
+    return res.status(400).send(badRequestError('Email и пароль не должны быть пустыми'));
+  }
+
+  User.findOne(email)
+    .orFail(new Error('NotFound'))
     .then((user) => {
       res.send(user);
+    })
+    .catch((error) => {
+      if (error.name === 'ValidationError' || error.name === 'CastError') {
+        res.status(400).send(badRequestError('Неправильные почта или пароль'));
+      } else if (error.message === 'NotFound') {
+        res.status(404).send(notFoundError('Неправильные почта или пароль'));
+      } else {
+        res.status(500).send(badRequestError('На сервере произошла ошибка'));
+      }
+    });
+}
+
+const createUser = (req, res) => {
+  const {email, password} = req.body;
+
+  bcrypt.hash(password, 10)
+    .then(hash => User.create({
+        email,
+        password : hash
+      }))
+    .then((user) => {
+      res.status(201).send(user);
     })
     .catch((error) => {
       if (error.name === 'ValidationError') {
@@ -14,7 +42,8 @@ const createUser = (req, res) => {
       } else {
         res.status(500).send(badRequestError('На сервере произошла ошибка'));
       }
-    });
+    }
+    )
 };
 
 const getUsers = (req, res) => {
@@ -105,9 +134,10 @@ const updateUserAvatar = (req, res) => {
 };
 
 module.exports = {
+  login,
+  createUser,
   getUsers,
   getUserById,
-  createUser,
   updateUserProfile,
   updateUserAvatar,
 };

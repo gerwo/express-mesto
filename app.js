@@ -3,11 +3,15 @@ const express = require('express');
 const { PORT = 4000 } = process.env;
 const mongoose = require('mongoose');
 const router = require('./routes');
+const bodyParser = require('body-parser')
+
 const { notFoundError } = require('./errors/errors');
 
 const app = express();
 
 app.use(express.json());
+
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   req.user = {
