@@ -1,32 +1,43 @@
+require('dotenv').config();
+
 const express = require('express');
 
-const { PORT = 4000 } = process.env;
+const { PORT, MONGODB_URL } = process.env;
 const mongoose = require('mongoose');
 const router = require('./routes');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const auth = require('./middlewares/auth');
 
-const { notFoundError } = require('./errors/errors');
+const NotFoundError = require('./errors/not-found-err');
+const { login, createUser } = require('./controllers/users');
 
 const app = express();
 
-app.use(express.json());
-
 app.use(bodyParser.json());
+app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '605c5ca22888a053884fd157',
-  };
-  next();
-});
+app.post('/signin', login);
+app.post('/signup', createUser);
+
+app.use(auth);
 
 app.use(router);
 
 app.use('*', (req, res) => {
-  res.status(404).send(notFoundError('Страница не найдена'));
+  throw new NotFoundError('Страница не найдена');
 });
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  if (statusCode) {
+    res.status(statusCode).send({ message : statusCode === 500 ? "На сервере произошла ошибка" : message});
+  }
+});
+
+
+mongoose.connect(MONGODB_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
