@@ -31,10 +31,12 @@ const deleteCard = (req, res, next) => {
   const id = req.params.cardId;
 
   Card.findById({ _id: id })
-    .orFail(new Error('NotFound'))
     .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Указанная карточка не найдена');
+      }
       if (JSON.stringify(card.owner) !== JSON.stringify(req.user._id)) {
-        throw new ForbiddenError('У вас недостаточно прав для удаления данной карточки');
+        throw new ForbiddenError('У вас нет прав для удаления данной карточки');
       }
 
       Card.deleteOne({ _id: id })

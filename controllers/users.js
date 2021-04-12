@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 
 const NotFoundError = require('../errors/not-found-err');
@@ -17,12 +17,12 @@ const login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new BadRequestError('Некоректные  почта или пароль');
+        throw new BadRequestError('Неправильные почта или пароль');
       }
 
       const token = jwt.sign({
         _id: user._id,
-      }, JWT_SECRET);
+      }, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
 
       res.cookie('jwt', token, {
         httpOnly: true,
