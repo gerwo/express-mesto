@@ -27,11 +27,6 @@ mongoose.connect(MONGODB_URL, {
 
 const corsOptions = {
   origin: '*',
-  methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin'],
-  credentials: true,
 };
 
 app.use(cors(corsOptions));
