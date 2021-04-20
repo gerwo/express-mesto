@@ -32,12 +32,9 @@ const deleteCard = (req, res, next) => {
 
   Card.findById({ _id: id })
     .then((card) => {
-      req.send(card);
-
-      return;
-
       if (!card) {
-        throw new NotFoundError('Указанная карточка не найдена');
+        res.send(card);
+        //throw new NotFoundError('Указанная карточка не найдена');
       }
       if (JSON.stringify(card.owner) !== JSON.stringify(req.user._id)) {
         throw new ForbiddenError('У вас нет прав для удаления данной карточки');
