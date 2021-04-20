@@ -39,12 +39,12 @@ const corsConfig = {
   credentials: true,
 };
 
-app.use('*', cors(corsConfig));
-
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(requestLogger);
+
+app.use('*', cors(corsConfig));
 
 app.use(router);
 
