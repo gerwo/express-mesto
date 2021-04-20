@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 
 const {
   PORT = 3000,
@@ -23,6 +24,8 @@ mongoose.connect(MONGODB_URL, {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(cookieParser());
