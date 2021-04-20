@@ -44,7 +44,8 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
-app.use('*', cors(corsConfig));
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 
 app.use(router);
 
