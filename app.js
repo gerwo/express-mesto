@@ -32,6 +32,7 @@ const corsOptions = {
     'http://gerwo.nomoredomains.club',
     'https://gerwo.nomoredomains.club',
   ],
+  methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
 };
 
 app.use(cors(corsOptions));
