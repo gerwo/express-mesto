@@ -1,7 +1,6 @@
 {
   "name": "express-mesto",
   "version": "0.1.0",
-  "homepage": "https://gerwo.github.io/express-mesto/",
   "private": false,
   "dependencies": {
     "bcryptjs": "^2.4.3",
