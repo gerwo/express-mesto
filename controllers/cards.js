@@ -32,6 +32,10 @@ const deleteCard = (req, res, next) => {
 
   Card.findById({ _id: id })
     .then((card) => {
+      req.send(card);
+
+      return;
+
       if (!card) {
         throw new NotFoundError('Указанная карточка не найдена');
       }
