@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const {
@@ -9,6 +10,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 const router = require('./routes');
 
 const NotFoundError = require('./errors/not-found-err');
@@ -24,11 +27,15 @@ mongoose.connect(MONGODB_URL, {
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use(requestLogger);
+
 app.use(router);
 
 app.use('*', () => {
   throw new NotFoundError('Страница не найдена');
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
