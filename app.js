@@ -25,16 +25,21 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-const corsOptions = {
+const corsConfig = {
   origin: [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://gerwo.nomoredomains.club',
     'https://gerwo.nomoredomains.club',
   ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Origin', 'Referer', 'Accept', 'Authorization'],
+  credentials: true,
 };
 
-app.use(cors(corsOptions));
+app.use('*', cors(corsConfig));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
