@@ -2,11 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-const {
-  PORT = 3000,
-  MONGODB_URL = 'mongodb://localhost:27017/mestodb',
-} = process.env;
-
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -16,6 +11,11 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes');
 
 const NotFoundError = require('./errors/not-found-err');
+
+const {
+  PORT = 3000,
+  MONGODB_URL = 'mongodb://localhost:27017/mestodb',
+} = process.env;
 
 const app = express();
 
@@ -32,10 +32,6 @@ const corsConfig = {
     'http://gerwo.nomoredomains.club',
     'https://gerwo.nomoredomains.club',
   ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin', 'Referer', 'Accept', 'Authorization'],
   credentials: true,
 };
 
@@ -45,7 +41,6 @@ app.use(cookieParser());
 app.use(requestLogger);
 
 app.use(cors(corsConfig));
-app.options('*', cors(corsConfig));
 
 app.use(router);
 
