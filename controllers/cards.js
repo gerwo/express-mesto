@@ -48,6 +48,8 @@ const deleteCard = (req, res, next) => {
 };
 
 const likeCard = (req, res, next) => {
+  res.send(req.params);
+  return;
   const id = req.params.cardId;
   const userId = req.user._id;
 

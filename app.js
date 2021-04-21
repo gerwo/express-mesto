@@ -25,7 +25,7 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-app.use(cors());
+app.use('*', cors());
 
 app.use(cookieParser());
 app.use(requestLogger);
