@@ -25,25 +25,27 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-const corsConfig = {
-  origin: true,
-  credentials: true,
+app.use(cors());
+
+const allowCrossDomain = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
+
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  } else {
+    next();
+  }
 };
 
-app.use(bodyParser.json());
+app.options('*', cors());
+
 app.use(cookieParser());
-
 app.use(requestLogger);
+app.use(allowCrossDomain);
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Method', 'GET,HEAD,PUT,POST,PATCH,DELETE,OPTIONS');
-
-  next();
-});
-
-app.use(cors(corsConfig));
+app.use(bodyParser.json());
 
 app.use(router);
 
