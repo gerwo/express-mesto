@@ -20,13 +20,16 @@ const login = (req, res, next) => {
         throw new BadRequestError('Неправильные почта или пароль');
       }
 
-      const token = jwt.sign({
-        _id: user._id,
-      }, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
+        { expiresIn: '7d' },
+      );
 
       res.cookie('jwt', token, {
         httpOnly: true,
-        sameSite: false,
+        secure: true,
+        sameSite: 'none',
         expiresIn: (3600 * 24 * 7),
       })
         .send({ message: 'Вы авторизовались!' });
