@@ -26,7 +26,6 @@ mongoose.connect(MONGODB_URL, {
 });
 
 const corsConfig = {
-  origin: true,
   credentials: true,
 };
 
@@ -36,7 +35,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 app.use(cors(corsConfig));
-app.options('*', cors(corsConfig));
 
 app.use(router);
 
