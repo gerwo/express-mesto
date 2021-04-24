@@ -42,7 +42,8 @@ const updateUserAvatarValidation = celebrate({
     avatar: Joi
       .string()
       .min(2)
-      .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/),
+      .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/)
+      .required(),
   }),
 });
 
