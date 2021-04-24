@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const router = require('./routes');
+const router = require('./routes/index');
 
 const NotFoundError = require('./errors/not-found-err');
 
@@ -25,26 +25,26 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-const corsList = ['https://gerwo.nomoredomains.club/', 'http://gerwo.nomoredomains.club/', 'http://localhost:3000/'];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (corsList.indexOf(origin) !== -1) {
-      callback(null, true);
-    }
-  },
+const corsConfig = {
+  origin: [
+    'https://gerwo.nomoredomains.club/',
+    'http://gerwo.nomoredomains.club/',
+    'http://localhost:3000/',
+    'http://localhost:3001/',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Origin', 'Referer', 'Accept', 'Authorization'],
   credentials: true,
 };
-
-//
-
-app.set('trust proxy', 1);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.use(cors(corsOptions));
+
+app.use('*', cors(corsConfig));
 
 app.use(router);
 
