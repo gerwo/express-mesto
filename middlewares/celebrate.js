@@ -10,7 +10,8 @@ const createUserValidation = celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi
       .string()
-      .pattern(/^(https?\:\/\/)?[a-z0-9-_#@\',;=*+()&$![\]~:?.\/]*\.(jpg|jpeg|png|gif)$/i),
+      .min(2)
+      .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/),
   }),
 });
 
@@ -40,8 +41,8 @@ const updateUserAvatarValidation = celebrate({
   body: Joi.object().keys({
     avatar: Joi
       .string()
-      .pattern(/^(https?\:\/\/)?[a-z0-9-_#@\',;=*+()&$![\]~:?.\/]*\.(jpg|jpeg|png|gif)$/i)
-      .required(),
+      .min(2)
+      .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/),
   }),
 });
 
@@ -50,8 +51,9 @@ const createCardValidation = celebrate({
     name: Joi.string().required().min(2).max(30),
     link: Joi
       .string()
+      .min(2)
       .required()
-      .pattern(/^(https?\:\/\/)?[a-z0-9-_#@\',;=*+()&$![\]~:?.\/]*\.(jpg|jpeg|png|gif)$/i),
+      .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/),
   }),
 });
 
