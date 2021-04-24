@@ -25,7 +25,7 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-const corsList = ['https://gerwo.nomoredomains.club/', 'http://gerwo.nomoredomains.club/'];
+const corsList = ['https://gerwo.nomoredomains.club/', 'http://gerwo.nomoredomains.club/', 'http://localhost:3000/'];
 
 const corsOptions = {
   origin: (origin, callback) => {
