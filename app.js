@@ -32,10 +32,6 @@ const corsConfig = {
     'http://localhost:3000/',
     'http://localhost:3001/',
   ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin', 'Referer', 'Accept', 'Authorization'],
   credentials: true,
 };
 
@@ -44,7 +40,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
-app.use('*', cors(corsConfig));
+app.use(cors(corsConfig));
 
 app.use(router);
 
