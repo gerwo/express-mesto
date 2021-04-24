@@ -25,12 +25,18 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
-app.use(cors());
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 
 app.use(router);
 
