@@ -13,7 +13,7 @@ router.get('/crash-test', () => {
 
 router.post('/signin', loginValidation, login);
 router.post('/signup', createUserValidation, createUser);
-router.get('/signout', signout);
+router.delete('/signout', signout);
 
 router.use(auth);
 
