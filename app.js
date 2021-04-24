@@ -13,7 +13,7 @@ const router = require('./routes/index');
 const NotFoundError = require('./errors/not-found-err');
 
 const {
-  PORT = 3001,
+  PORT = 3000,
   MONGODB_URL = 'mongodb://localhost:27017/mestodb',
 } = process.env;
 
