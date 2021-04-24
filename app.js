@@ -25,24 +25,26 @@ mongoose.connect(MONGODB_URL, {
   useFindAndModify: false,
 });
 
-app.use((req, res, next) => {
-  res.append('Access-Control-Allow-Origin', ['*']);
-  res.append('Access-Control-Expose-Headers', 'Set-Cookie');
-  res.append('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE');
-  res.append('Access-Control-Allow-Headers', 'Origin, X-Requ  ested-With, Content-Type, Accept, Set-Cookie');
+const corsList = ['https://gerwo.nomoredomains.club/', 'http://gerwo.nomoredomains.club/'];
 
-  next();
-});
-
-app.use(cors({
-  origin: true,
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (corsList.indexOf(origin) !== -1) {
+      callback(null, true);
+    }
+  },
   credentials: true,
-}));
+};
+
+//
+
+app.set('trust proxy', 1);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
+app.use(cors(corsOptions));
 
 app.use(router);
 
