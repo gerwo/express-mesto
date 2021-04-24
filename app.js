@@ -13,7 +13,7 @@ const router = require('./routes/index');
 const NotFoundError = require('./errors/not-found-err');
 
 const {
-  PORT = 3000,
+  PORT = 80,
   MONGODB_URL = 'mongodb://localhost:27017/mestodb',
 } = process.env;
 
@@ -32,7 +32,7 @@ app.use(requestLogger);
 
 app.use(cors());
 
-app.get('test', cors(), (req, res) => {
+app.get('/test', cors(), (req, res) => {
   res.send('asdasdasdsadasdsad');
 });
 
