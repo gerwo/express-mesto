@@ -75,6 +75,10 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
+const signout = (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Успешный выход' });
+};
+
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
@@ -152,6 +156,7 @@ const updateUserAvatar = (req, res, next) => {
 module.exports = {
   login,
   createUser,
+  signout,
   getCurrentUser,
   getUsers,
   getUserById,
