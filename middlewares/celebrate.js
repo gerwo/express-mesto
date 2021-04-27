@@ -53,7 +53,6 @@ const createCardValidation = celebrate({
     link: Joi
       .string()
       .min(2)
-      .required()
       .pattern(/^(https?:\/\/)(www\.)?([\da-z-.]+)\.([a-z.]{2,6})[\da-zA-Z-._~:?#[\]@!$&'()*+,;=/]*\/?#?$/),
   }),
 });
