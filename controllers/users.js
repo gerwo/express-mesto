@@ -76,7 +76,7 @@ const createUser = (req, res, next) => {
 
 const signout = (req, res) => {
   res.clearCookie('jwt').send({ message: 'Успешный выход' });
-}
+};
 
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
