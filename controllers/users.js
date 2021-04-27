@@ -28,7 +28,7 @@ const login = (req, res, next) => {
 
       res.cookie('jwt', token, {
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: true,
         expiresIn: (3600 * 24 * 7),
       })
         .send({ message: 'Вы авторизовались!' });
@@ -76,7 +76,7 @@ const createUser = (req, res, next) => {
 
 const signout = (req, res) => {
   res.clearCookie('jwt').send({ message: 'Успешный выход' });
-};
+}
 
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
