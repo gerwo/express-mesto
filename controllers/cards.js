@@ -5,7 +5,7 @@ const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
 const getCards = (req, res, next) => {
-  Card.find({})
+  Card.find({limit: 15})
     .then((cards) => {
       res.send(cards);
     })
