@@ -28,7 +28,8 @@ const login = (req, res, next) => {
 
       res.cookie('jwt', token, {
         httpOnly: true,
-        sameSite: true,
+        secure: true,
+        sameSite: 'none',
         expiresIn: (3600 * 24 * 7),
       })
         .send({ message: 'Вы авторизовались!' });
