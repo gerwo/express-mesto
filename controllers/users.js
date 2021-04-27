@@ -28,7 +28,6 @@ const login = (req, res, next) => {
 
       res.cookie('jwt', token, {
         httpOnly: true,
-        secure: true,
         sameSite: 'none',
         expiresIn: (3600 * 24 * 7),
       })
